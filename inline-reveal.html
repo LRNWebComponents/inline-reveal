@@ -20,27 +20,54 @@ A LRN element
       :host {
         display: block;
       }
+
+      :host[opened] #reveal {
+        display: block;
+      }
+
+      #reveal {
+        display: none;
+      }
+
+      
     </style>
-    <h2>[[title]]</h2>
+
+    <div id="content">
+      <slot name="content"></slot>
+    </div>
+
+    <div id="reveal">
+      <slot id="reveal"></slot>
+    </div>
+
   </template>
 
   <script>
     Polymer({
 
       is: 'inline-reveal',
-      behaviors: [HAXBehaviors.PropertiesBehaviors, MaterializeCSSBehaviors.ColorBehaviors, SchemaBehaviors.Schema],
+      behaviors: [
+        HAXBehaviors.PropertiesBehaviors,
+        MaterializeCSSBehaviors.ColorBehaviors,
+        SchemaBehaviors.Schema
+      ],
+      listeners: {
+        'content.tap': '_displayArea',
+      },
       properties: {
         /**
          * Title
          */
-        title: {
-          type: String,
+        opened: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
         },
       },
       /**
        * Attached to the DOM, now fire.
        */
-      attached: function() {
+      attached: function () {
         // Establish hax property binding
         let props = {
           'canScale': true,
@@ -86,6 +113,14 @@ A LRN element
           }
         };
         this.setHaxProperties(props);
+      },
+      _displayArea: function (e) {
+        const normailized = Polymer.dom(e);
+        const root = normailized.rootTarget;
+        const triggerAttribute = root.getAttribute("data-trigger");
+        if (triggerAttribute !== null && typeof triggerAttribute !== 'undefined') {
+          this.opened = !this.opened;
+        }
       },
     });
   </script>
