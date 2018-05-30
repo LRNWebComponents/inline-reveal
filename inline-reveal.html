@@ -19,6 +19,14 @@ A LRN element
     <style>
       :host {
         display: block;
+        --inline-background: lightgray;
+        --inline-color: black;
+        --inline-padding: 3px;
+        --inline-border-radius: 3px;
+        --inline-hover-background: gray;
+        --inline-hover-color: white;
+        --inline-reveal-padding: 25px;
+        --inline-reveal-background: whitesmoke;
       }
 
       :host[opened] #reveal {
@@ -27,9 +35,23 @@ A LRN element
 
       #reveal {
         display: none;
+        padding: var(--inline-reveal-padding);
+        background-color: var(--inline-reveal-background);
       }
 
-      
+      ::shadow #content a {
+        background-color: var(--inline-background);
+        color: var(--inline-color);
+        padding: var(--inline-padding);
+        border-radius: var(--inline-border-radius);
+        text-decoration: none;
+      }
+
+      ::shadow #content a:hover {
+        background-color: var(--inline-hover-background);
+        color: var(--inline-hover-color);
+      }
+
     </style>
 
     <div id="content">
