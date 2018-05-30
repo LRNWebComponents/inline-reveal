@@ -19,37 +19,43 @@ A LRN element
     <style>
       :host {
         display: block;
-        --inline-background: lightgray;
-        --inline-color: black;
-        --inline-padding: 3px;
-        --inline-border-radius: 3px;
-        --inline-hover-background: gray;
-        --inline-hover-color: white;
-        --inline-reveal-padding: 25px;
-        --inline-reveal-background: whitesmoke;
+        --inline-background: #e9ebe4;
+        --inline-background-hover: #d5d9cc;
+        --inline-text-color: #326891;
+        --inline-text-hover: #fff;
+        --reveal-background: gray;
       }
 
       :host[opened] #reveal {
         display: block;
+        max-height: 100vh;
       }
 
       #reveal {
-        display: none;
-        padding: var(--inline-reveal-padding);
-        background-color: var(--inline-reveal-background);
+        max-height: 0;
+        width: 90%;
+        background-color: var(--reveal-background);
+        transition: all .4s ease-in-out;
+        overflow: hidden;
+        align-content: center;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       ::shadow #content a {
         background-color: var(--inline-background);
-        color: var(--inline-color);
-        padding: var(--inline-padding);
-        border-radius: var(--inline-border-radius);
+        color: var(--inline-text-color);
+        border-radius: 4px;
         text-decoration: none;
+        padding: 5px;
+        margin: 0 2px 0;
+        text-shadow: 1px 1px 1px #fff;
+        cursor: pointer;
       }
 
       ::shadow #content a:hover {
-        background-color: var(--inline-hover-background);
-        color: var(--inline-hover-color);
+        background-color: var(--inline-background-hover);
+        transition: background-color 2s;
       }
 
     </style>
@@ -57,9 +63,8 @@ A LRN element
     <div id="content">
       <slot name="content"></slot>
     </div>
-
     <div id="reveal">
-      <slot id="reveal"></slot>
+      <slot name="reveal"></slot>
     </div>
 
   </template>
@@ -78,7 +83,7 @@ A LRN element
       },
       properties: {
         /**
-         * Title
+         * State of toggle.
          */
         opened: {
           type: Boolean,
@@ -136,14 +141,20 @@ A LRN element
         };
         this.setHaxProperties(props);
       },
+
       _displayArea: function (e) {
-        const normailized = Polymer.dom(e);
-        const root = normailized.rootTarget;
+        const normalized = Polymer.dom(e);
+        const root = normalized.rootTarget;
         const triggerAttribute = root.getAttribute("data-trigger");
         if (triggerAttribute !== null && typeof triggerAttribute !== 'undefined') {
           this.opened = !this.opened;
         }
       },
+
+
+
+
+
     });
   </script>
 </dom-module>
