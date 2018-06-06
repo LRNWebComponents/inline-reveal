@@ -2,6 +2,9 @@
 <link rel="import" href="../materializecss-styles/materializecss-styles.html">
 <link rel="import" href="../hax-body-behaviors/hax-body-behaviors.html">
 <link rel="import" href="../schema-behaviors/schema-behaviors.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../iron-icons/editor-icons.html">
+
 <!--
 `inline-reveal`
 A LRN element
@@ -42,6 +45,22 @@ A LRN element
         margin-right: auto;
       }
 
+      paper-icon-button#closeBtn {
+        display: none;
+      }
+
+      :host[opened] paper-icon-button#closeBtn {
+        display: block;
+        float: right;
+        color: #fff;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        right: 111px;
+      }
+
+
+
       ::shadow #content a {
         background-color: var(--inline-background);
         color: var(--inline-text-color);
@@ -57,13 +76,15 @@ A LRN element
         background-color: var(--inline-background-hover);
         transition: background-color 2s;
       }
-
     </style>
 
     <div id="content">
       <slot name="content"></slot>
     </div>
     <div id="reveal">
+      <div class="close_btn">
+        <paper-icon-button id="closeBtn" icon="icons:close" on-click="closeReveal" noink></paper-icon-button>
+      </div>
       <slot name="reveal"></slot>
     </div>
 
@@ -149,6 +170,10 @@ A LRN element
         if (triggerAttribute !== null && typeof triggerAttribute !== 'undefined') {
           this.opened = !this.opened;
         }
+      },
+
+      closeReveal: function () {
+        this.opened = !this.opened;
       },
 
 
