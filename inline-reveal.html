@@ -37,7 +37,7 @@ A LRN element
       #reveal {
         max-height: 0;
         width: 90%;
-        background-color: var(--reveal-background);
+        /* background-color: var(--reveal-background); */
         transition: all .3s ease-in-out;
         overflow: hidden;
         align-content: center;
@@ -59,8 +59,6 @@ A LRN element
         right: 111px;
       }
 
-
-
       ::shadow #content a {
         background-color: var(--inline-background);
         color: var(--inline-text-color);
@@ -76,6 +74,8 @@ A LRN element
         background-color: var(--inline-background-hover);
         transition: background-color 2s;
       }
+
+
     </style>
 
     <div id="content">
@@ -83,9 +83,10 @@ A LRN element
     </div>
     <div id="reveal">
       <div class="close_btn">
-        <paper-icon-button id="closeBtn" icon="icons:close" on-click="closeReveal" noink></paper-icon-button>
+        <paper-icon-button id="closeBtn" icon="icons:close" noink></paper-icon-button>
       </div>
       <slot name="reveal"></slot>
+      <slot name="citation"></slot>
     </div>
 
   </template>
@@ -101,6 +102,7 @@ A LRN element
       ],
       listeners: {
         'content.tap': '_displayArea',
+        'reveal.tap': '_closeDisplay',
       },
       properties: {
         /**
@@ -172,12 +174,9 @@ A LRN element
         }
       },
 
-      closeReveal: function () {
+      _closeDisplay: function (e) {
         this.opened = !this.opened;
       },
-
-
-
 
 
     });
