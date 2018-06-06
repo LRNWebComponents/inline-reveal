@@ -1,0 +1,184 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../materializecss-styles/materializecss-styles.html">
+<link rel="import" href="../hax-body-behaviors/hax-body-behaviors.html">
+<link rel="import" href="../schema-behaviors/schema-behaviors.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../iron-icons/editor-icons.html">
+
+<!--
+`inline-reveal`
+A LRN element
+
+@demo demo/index.html
+
+@microcopy - the mental model for this element
+ -
+ -
+
+-->
+
+<dom-module id="inline-reveal">
+  <template>
+    <style>
+      :host {
+        display: block;
+        --inline-background: #e9ebe4;
+        --inline-background-hover: #d5d9cc;
+        --inline-text-color: #326891;
+        --inline-text-hover: #fff;
+        --reveal-background: gray;
+      }
+
+      :host[opened] #reveal {
+        display: block;
+        max-height: 100vh;
+      }
+
+      #reveal {
+        max-height: 0;
+        width: 90%;
+        /* background-color: var(--reveal-background); */
+        transition: all .3s ease-in-out;
+        overflow: hidden;
+        align-content: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      paper-icon-button#closeBtn {
+        display: none;
+      }
+
+      :host[opened] paper-icon-button#closeBtn {
+        display: block;
+        float: right;
+        color: #fff;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        right: 111px;
+      }
+
+      ::shadow #content a {
+        background-color: var(--inline-background);
+        color: var(--inline-text-color);
+        border-radius: 4px;
+        text-decoration: none;
+        padding: 5px;
+        margin: 0 2px 0;
+        text-shadow: 1px 1px 1px #fff;
+        cursor: pointer;
+      }
+
+      ::shadow #content a:hover {
+        background-color: var(--inline-background-hover);
+        transition: background-color 2s;
+      }
+
+
+    </style>
+
+    <div id="content">
+      <slot name="content"></slot>
+    </div>
+    <div id="reveal">
+      <div class="close_btn">
+        <paper-icon-button id="closeBtn" icon="icons:close" noink></paper-icon-button>
+      </div>
+      <slot name="reveal"></slot>
+      <slot name="citation"></slot>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'inline-reveal',
+      behaviors: [
+        HAXBehaviors.PropertiesBehaviors,
+        MaterializeCSSBehaviors.ColorBehaviors,
+        SchemaBehaviors.Schema
+      ],
+      listeners: {
+        'content.tap': '_displayArea',
+        'reveal.tap': '_closeDisplay',
+      },
+      properties: {
+        /**
+         * State of toggle.
+         */
+        opened: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+      },
+      /**
+       * Attached to the DOM, now fire.
+       */
+      attached: function () {
+        // Establish hax property binding
+        let props = {
+          'canScale': true,
+          'canPosition': true,
+          'canEditSource': false,
+          'gizmo': {
+            'title': 'Sample gizmo',
+            'description': 'The user will be able to see this for selection in a UI.',
+            'icon': 'av:play-circle-filled',
+            'color': 'grey',
+            'groups': ['Video', 'Media'],
+            'handles': [
+              {
+                'type': 'video',
+                'url': 'source'
+              }
+            ],
+            'meta': {
+              'author': 'Your organization on github'
+            }
+          },
+          'settings': {
+            'quick': [
+              {
+                'property': 'title',
+                'title': 'Title',
+                'description': 'The title of the element',
+                'inputMethod': 'textfield',
+                'icon': 'editor:title',
+              },
+            ],
+            'configure': [
+              {
+                'property': 'title',
+                'title': 'Title',
+                'description': 'The title of the element',
+                'inputMethod': 'textfield',
+                'icon': 'editor:title',
+              },
+            ],
+            'advanced': [
+            ]
+          }
+        };
+        this.setHaxProperties(props);
+      },
+
+      _displayArea: function (e) {
+        const normalized = Polymer.dom(e);
+        const root = normalized.rootTarget;
+        const triggerAttribute = root.getAttribute("data-trigger");
+        if (triggerAttribute !== null && typeof triggerAttribute !== 'undefined') {
+          this.opened = !this.opened;
+        }
+      },
+
+      _closeDisplay: function (e) {
+        this.opened = !this.opened;
+      },
+
+
+    });
+  </script>
+</dom-module>
